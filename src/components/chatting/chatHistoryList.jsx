@@ -6,7 +6,7 @@ const ChatHistoryList = ({ chatSessions, onSelectSession }) => {
                 {chatSessions.map((session) => (
                     <li
                         key={session.id}
-                        className="p-3 cursor-pointer hover:bg-purple-100 transition-colors rounded-lg"
+                        className="p-3 cursor-pointer hover:bg-purple-100 transition-colors"
                         onClick={() => onSelectSession(session.id)}
                     >
                         <div className="font-medium text-foreground">{session.title}</div>
