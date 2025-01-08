@@ -4,9 +4,12 @@ import ChatSessionViewer from './ChatSessionViewer';
 import { dummyChatSessions } from '../../data/dummyChatSesstions.js';
 
 const ChatUI = () => {
+    // 채팅 세션 목록 상태관리
     const [chatSessions, setChatSessions] = useState(dummyChatSessions);
+    // 선택된 채팅 세션 상태관리
     const [selectedSession, setSelectedSession] = useState(null);
 
+    // 채팅 세션 선택 처리 함수
     const handleSelectSession = (sessionId) => {
         const session = chatSessions.find((s) => s.id === sessionId);
         setSelectedSession(session);

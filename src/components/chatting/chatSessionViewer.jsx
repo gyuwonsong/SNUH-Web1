@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import UserInput from "./UserInput.jsx";
 import { BiBell, BiBellOff, BiCog } from "react-icons/bi";
 
+// 엔터티 추출 함수
 const extractEntities = (text) => {
     if (typeof text !== "string") {
         console.error("Invalid text format:", text);
@@ -11,6 +12,7 @@ const extractEntities = (text) => {
     return text.match(regex) || [];
 };
 
+// LLM API 호출 함수
 const getLLMResponse = async (inputText, entities) => {
     return new Promise((resolve) => {
         setTimeout(() => {
@@ -20,18 +22,22 @@ const getLLMResponse = async (inputText, entities) => {
 };
 
 const ChatSessionViewer = ({ session, onUserMessageSubmit }) => {
+    // 엔터티 상태관리
     const [entities, setEntities] = useState([]);
+    // 채팅 히스토리 상태관리
     const [chatHistory, setChatHistory] = useState([]);
 
-    // session이 변경될 때 chatHistory를 업데이트
+    // session이 변경될 때 chatHistory 업데이트
     useEffect(() => {
         if (session) {
-            setChatHistory(session.messages);  // 새로운 세션의 메시지로 초기화
+            setChatHistory(session.messages);
         }
     }, [session]);
 
+    // 알림 상태 상태관리
     const [notificationStates, setNotificationStates] = useState({});
 
+    // 알림 토글 함수
     const toggleNotifications = (sessionId) => {
         setNotificationStates((prev) => ({
             ...prev,
@@ -39,23 +45,25 @@ const ChatSessionViewer = ({ session, onUserMessageSubmit }) => {
         }));
     };
 
+    // 알림 활성화 여부
     const isNotificationsEnabled = notificationStates[session?.id] ?? true;
 
+    // 사용자 메시지 전송 처리 함수
     const handleUserMessageSubmit = async (message) => {
-        const { text } = message;  // 객체에서 text를 추출
+        const { text } = message;  // 1. 객체에서 text를 추출
         if (!text) {
             console.error("No text in message:", message);
             return;
         }
 
-        const extractedEntities = extractEntities(text);  // 문자열로 처리
+        const extractedEntities = extractEntities(text);  // 2. 문자열로 처리
         setEntities(extractedEntities);
 
         setChatHistory((prev) => [...prev, { sender: "user", text }]);  // text만 저장
 
         const llmResponse = await getLLMResponse(text, extractedEntities);
         setChatHistory((prev) => [...prev, { sender: "bot", text: llmResponse }]);
-        onUserMessageSubmit({ sender: "user", text });  // user 메시지를 외부에 전달
+        onUserMessageSubmit({ sender: "user", text });  // 3. user 메시지를 외부에 전달
     };
 
     return (

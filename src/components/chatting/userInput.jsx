@@ -1,14 +1,19 @@
 import { useState } from 'react';
 import { RiSendPlaneFill } from "react-icons/ri";
 import { BiPlusCircle, BiSolidMicrophone } from "react-icons/bi";
-import { AiOutlineLoading3Quarters } from "react-icons/ai"; // 로딩 아이콘
-import { MdCancel } from "react-icons/md"; // 제거 아이콘
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { MdCancel } from "react-icons/md";
+import { MdTextFields } from "react-icons/md";
 
 const UserInput = ({ onSubmit }) => {
+    // 텍스트 입력 상태관리
     const [inputText, setInputText] = useState('');
+    // 파일 업로드 상태관리
     const [files, setFiles] = useState([]);
-    const [uploading, setUploading] = useState(false); // 업로드 상태 관리
+    // 업로드 중인지 여부 상태관리
+    const [uploading, setUploading] = useState(false);
 
+    // 메시지 전송 처리 함수
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (inputText.trim() || files.length) {
@@ -21,15 +26,18 @@ const UserInput = ({ onSubmit }) => {
         }
     };
 
+    // 파일 선택 시 처리 함수
     const handleFileChange = (e) => {
         setFiles([...files, ...Array.from(e.target.files)]);
     };
 
+    // 파일 삭제 처리 함수
     const handleRemoveFile = (index) => {
         const newFiles = files.filter((_, i) => i !== index);
         setFiles(newFiles);
     };
 
+    // 마이크 클릭 시 처리 함수
     const handleMicrophoneClick = () => {
         alert("음성 입력 기능이 아직 구현되지 않았습니다.");
     };
@@ -56,8 +64,9 @@ const UserInput = ({ onSubmit }) => {
             </div>
 
             <form onSubmit={handleSubmit} className="flex flex-row relative items-center">
-                <label className="text-2xl mr-3 cursor-pointer">
-                    <BiPlusCircle />
+                {/* 파일 업로드 아이콘 */}
+                <label className="text-2xl mr-3 cursor-pointer flex items-center">
+                    <BiPlusCircle/>
                     <input
                         type="file"
                         multiple
@@ -65,30 +74,42 @@ const UserInput = ({ onSubmit }) => {
                         onChange={handleFileChange}
                     />
                 </label>
-                <textarea
-                    className="bg-muted w-full h-12 p-3 pr-20 rounded-2xl resize-none focus:ring-primary focus:outline-none"
-                    placeholder="Type your message..."
-                    value={inputText}
-                    onChange={(e) => setInputText(e.target.value)}
-                />
+
+                {/* 텍스트 입력 및 아이콘 */}
+                <div className="relative w-full">
+                    <MdTextFields
+                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-2xl"
+                    />
+                    <textarea
+                        className="bg-muted w-full h-12 pl-10 pr-20 p-3 rounded-2xl resize-none focus:ring-primary focus:outline-none flex items-center"
+                        placeholder="Type your message..."
+                        value={inputText}
+                        onChange={(e) => setInputText(e.target.value)}
+                    />
+                </div>
+
+                {/* 마이크 아이콘 */}
                 <BiSolidMicrophone
                     onClick={handleMicrophoneClick}
                     className="absolute right-20 top-1/2 transform -translate-y-1/2 text-2xl cursor-pointer"
                 />
+
+                {/* 전송 버튼 */}
                 <button
                     type="submit"
-                    className={`absolute right-2 top-1/2 py-1.5 px-5 transform -translate-y-1/2 bg-primary text-primary-foreground rounded-2xl flex items-center ${
+                    className={`absolute right-2 top-1/2 py-1.5 px-5 transform -translate-y-1/2 bg-primary text-primary-foreground rounded-xl flex items-center ${
                         uploading ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
                     disabled={uploading}
                 >
                     {uploading ? (
-                        <AiOutlineLoading3Quarters className="text-xl animate-spin" />
+                        <AiOutlineLoading3Quarters className="text-xl animate-spin"/>
                     ) : (
-                        <RiSendPlaneFill className="text-xl" />
+                        <RiSendPlaneFill className="text-xl"/>
                     )}
                 </button>
             </form>
+
         </div>
     );
 };
