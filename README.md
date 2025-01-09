@@ -32,7 +32,7 @@ npm run dev
 │   │   │   ├── chatUI.jsx            # 채팅 UI  
 │   │   │   └── userInput.jsx         # 채팅 입력창
 │   ├── data/              # 데이터 파일  
-│   │   └── dummyChatSessions.js  # 더미 채팅 세션 데이터  
+│   │   └── dummyChatSessions.js      # 더미 채팅 세션 데이터  
 │   ├── services/          # 서비스 파일 (API 호출 등)  
 │   │   └── llmService.js  # LLM 서비스 API 함수  
 │   ├── App.css            # App 컴포넌트 스타일 시트
